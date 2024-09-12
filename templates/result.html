@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результаты анализа</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+
+        function toggleCertInfo() {
+            var certInfo = document.getElementById('cert-info');
+            var buttonText = document.getElementById('cert-btn');
+
+            if (certInfo.style.display === 'none') {
+                certInfo.style.display = 'block';
+                buttonText.innerText = 'Скрыть сертификат';
+            } else {
+                certInfo.style.display = 'none';
+                buttonText.innerText = 'Посмотреть сертификат';
+            }
+        }
+
+
+        function toggleNmapInfo() {
+            var nmapInfo = document.getElementById('nmap-info');
+            var buttonText = document.getElementById('nmap-btn');
+
+            if (nmapInfo.style.display === 'none') {
+                nmapInfo.style.display = 'block';
+                buttonText.innerText = 'Скрыть результаты Nmap';
+            } else {
+                nmapInfo.style.display = 'none';
+                buttonText.innerText = 'Nmap результаты';
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Результаты анализа</h1>
+        <div class="result">
+            <p><strong>Время загрузки:</strong> {{ load_time }} секунд</p>
+            <p><strong>IP-адрес:</strong> {{ ip_address }}</p>
+
+            {% if cert_info != "SSL сертификат не найден или ошибка" %}
+                <p><strong>SSL сертификат:</strong> Найден</p>
+                <button id="cert-btn" onclick="toggleCertInfo()">Посмотреть сертификат</button>
+                <div id="cert-info" style="display: none; margin-top: 10px; background-color: #e9ecef; padding: 10px; border-radius: 5px;">
+                    <pre>{{ cert_info }}</pre>
+                </div>
+            {% else %}
+                <p><strong>SSL сертификат:</strong> {{ cert_info }}</p>
+            {% endif %}
+
+
+            {% if nmap_result != "Nmap-сканирование не выполнялось." %}
+                <button id="nmap-btn" onclick="toggleNmapInfo()">Nmap результаты</button>
+                <div id="nmap-info" style="display: none; margin-top: 10px; background-color: #e9ecef; padding: 10px; border-radius: 5px;">
+                    <pre>{{ nmap_result }}</pre>
+                </div>
+            {% else %}
+                <p><strong>Nmap:</strong> {{ nmap_result }}</p>
+            {% endif %}
+
+
+            <h3>DNS Параметры</h3>
+            <pre>{{ dns_info }}</pre>
+        </div>
+        <a href="/">Вернуться назад</a>
+    </div>
+</body>
+</html>
